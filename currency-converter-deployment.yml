@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currency-converter-deployment
+  labels:
+    app: currency-converter-deployment-label # LABEL-A: <--this label is to manage the deployment itself.
+                                     #this may be used to filter the deployment based on this label.
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: currency-converter-deployment-eks-service-pod    #LABEL-B:  <--  field defines how the Deployment finds which Pods to manage.
+  template:
+    metadata:
+      labels:
+        app: currency-converter-deployment-eks-service-pod   #LABEL-C: <--this is the label of the pod, this must be same as LABEL-B
+    spec:
+      containers:
+      - name: currency-converter-deployment-eks-container-name
+        image: mail2prasanthv/currency-converter-eks:3 #Container name in the docker hub
+        ports:
+        - containerPort: 8081 # spring boot app runs on port 8080
